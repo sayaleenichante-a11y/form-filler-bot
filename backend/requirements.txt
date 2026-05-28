@@ -1,0 +1,13 @@
+flask
+flask-cors
+pymupdf
+python-docx
+pandas
+openpyxl
+python-pptx
+striprtf
+beautifulsoup4
+pillow
+pytesseract
+sentence-transformers
+scikit-learn

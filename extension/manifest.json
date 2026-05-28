@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Smart AI Form Filler",
+  "version": "2.0",
+  "description": "AI-powered file to website form filler.",
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": [
+    "http://127.0.0.1:5050/*",
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["style.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
