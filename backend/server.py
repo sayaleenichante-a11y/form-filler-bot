@@ -7,7 +7,7 @@ import traceback
 
 from extractor import extract_text
 from ai_mapper import map_document_to_fields, build_candidates
-
+from impact_excel_mapper import parse_impact_prediction_excel
 
 app = Flask(__name__)
 CORS(app)
@@ -104,6 +104,37 @@ def debug_candidates():
             "error": str(e)
         }), 500
 
+@app.route("/parse-impact-excel", methods=["POST"])
+def parse_impact_excel():
+    try:
+        uploaded_file = request.files.get("file")
+
+        if not uploaded_file:
+            return jsonify({
+                "success": False,
+                "error": "No Excel file uploaded"
+            }), 400
+
+        temp_dir = Path(tempfile.gettempdir()) / "smart_form_filler"
+        temp_dir.mkdir(parents=True, exist_ok=True)
+
+        file_path = temp_dir / uploaded_file.filename
+        uploaded_file.save(file_path)
+
+        rows = parse_impact_prediction_excel(file_path)
+
+        return jsonify({
+            "success": True,
+            "totalRows": len(rows),
+            "rows": rows
+        })
+
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e),
+            "trace": traceback.format_exc()
+        }), 500
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5050, debug=False)
